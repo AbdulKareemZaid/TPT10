@@ -3,15 +3,19 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types._
 
-object KafkaConnection {
+object Consumer {
   def run(spark: SparkSession): Unit = {
     import spark.implicits._  // Import implicits after creating SparkSession
 
     // Define a schema for the tweet data
     val tweetSchema = new StructType()
+      .add("created_at", StringType)
       .add("id", StringType)
       .add("text", StringType)
       .add("geo", StringType)
+      .add("coordinates", StringType)
+      .add("place", StringType)
+      .add("user", StringType)
 
     // Read stream from Kafka
     val kafkaDF: DataFrame = spark.readStream

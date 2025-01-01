@@ -10,6 +10,9 @@ lazy val root = (project in file("."))
       "org.apache.spark" %% "spark-core" % "3.5.3",
       "org.apache.spark" %% "spark-sql" % "3.5.3",
       "org.apache.spark" %% "spark-sql-kafka-0-10" % "3.5.3",
-      "org.apache.kafka" % "kafka-clients" % "2.8.0"
+      "org.apache.kafka" % "kafka-clients" % "2.8.0",
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3"
+
+
     )
   )
