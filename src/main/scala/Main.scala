@@ -13,6 +13,6 @@ object Main {
       .getOrCreate()
 
     // Call the run method from StreamProcessing object
-    StreamProcessing.run(spark)
+    KafkaConnection.run(spark)
   }
 }
