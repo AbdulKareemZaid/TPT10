@@ -11,6 +11,8 @@ target/
 */idea.iml
 */idea.iws
 */idea.ipr
+target/global-logging/
+target/task-temp-directory
 
 # MacOS
 .DS_Store
