@@ -4,10 +4,14 @@ import org.apache.spark.sql.types.{StringType, StructType}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.ObjectMapper
 
+import java.time.{Instant, ZoneId}
+import java.time.format.DateTimeFormatter
 import java.util.Properties
 
 object ProducerApp {
   def main(args: Array[String]): Unit = {
+    System.setProperty("log4j.configuration", "file:src/main/resources/log4j.properties")
+
     val spark = SparkSession.builder()
       .appName("ProducerApp")
       .master("local[*]")
@@ -44,7 +48,10 @@ object ProducerApp {
         if (exception != null) {
           println(s"Message delivery failed: ${exception.getMessage}")
         } else {
-          println(s"Message delivered to ${metadata.topic()} [${metadata.partition()}]")
+          val dateTime = Instant.ofEpochMilli(metadata.timestamp())
+            .atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+          println(s"Message delivered to ${metadata.topic()} [${metadata.partition()}] at $dateTime")
         }
       })
 

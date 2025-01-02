@@ -5,6 +5,7 @@ import org.apache.spark.sql.types._
 
 object ConsumerApp {
   def main(args: Array[String]): Unit = {
+    System.setProperty("log4j.configuration", "file:src/main/resources/log4j.properties")
 
     val spark = SparkSession.builder()
       .appName("ConsumerApp")
