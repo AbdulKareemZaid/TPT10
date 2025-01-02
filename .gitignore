@@ -5,14 +5,11 @@ target/
 *.bak
 *.tmp
 .sbt/
-.idea/*
 .project
 .cache/
-*/idea.iml
-*/idea.iws
-*/idea.ipr
-target/global-logging/
-target/task-temp-directory
+.idea/*
+target/*
+
 
 # MacOS
 .DS_Store
