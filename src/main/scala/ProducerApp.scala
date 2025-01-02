@@ -9,7 +9,7 @@ import java.util.Properties
 object ProducerApp {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
-      .appName("KafkaSparkProducer")
+      .appName("ProducerApp")
       .master("local[*]")
       .getOrCreate()
 
@@ -28,7 +28,7 @@ object ProducerApp {
     val tweetDF: DataFrame = spark.read.schema(tweetSchema).json(filePath)
 
     val kafkaProps = new Properties()
-    kafkaProps.put("bootstrap.servers", "192.168.1.98:9092")
+    kafkaProps.put("bootstrap.servers", "localhost:9092")
     kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
@@ -49,7 +49,7 @@ object ProducerApp {
       })
 
       producer.flush()
-      Thread.sleep(1000)  // Add delay between messages to simulate streaming
+      Thread.sleep(1000)
     }
 
     producer.close()

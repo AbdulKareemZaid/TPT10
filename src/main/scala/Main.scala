@@ -12,7 +12,6 @@ object Main {
       .config(conf)
       .getOrCreate()
 
-    Consumer.run(spark)
 
   }
 }
