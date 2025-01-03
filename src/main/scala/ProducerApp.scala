@@ -4,12 +4,16 @@ import org.apache.spark.sql.types.{StringType, StructType}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.ObjectMapper
 
+import java.time.{Instant, ZoneId}
+import java.time.format.DateTimeFormatter
 import java.util.Properties
 
 object ProducerApp {
   def main(args: Array[String]): Unit = {
+    System.setProperty("log4j.configuration", "file:src/main/resources/log4j.properties")
+
     val spark = SparkSession.builder()
-      .appName("KafkaSparkProducer")
+      .appName("ProducerApp")
       .master("local[*]")
       .getOrCreate()
 
@@ -28,7 +32,7 @@ object ProducerApp {
     val tweetDF: DataFrame = spark.read.schema(tweetSchema).json(filePath)
 
     val kafkaProps = new Properties()
-    kafkaProps.put("bootstrap.servers", "192.168.1.98:9092")
+    kafkaProps.put("bootstrap.servers", "localhost:9092")
     kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
@@ -44,12 +48,15 @@ object ProducerApp {
         if (exception != null) {
           println(s"Message delivery failed: ${exception.getMessage}")
         } else {
-          println(s"Message delivered to ${metadata.topic()} [${metadata.partition()}]")
+          val dateTime = Instant.ofEpochMilli(metadata.timestamp())
+            .atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+          println(s"Message delivered to ${metadata.topic()} [${metadata.partition()}] at $dateTime")
         }
       })
 
       producer.flush()
-      Thread.sleep(1000)  // Add delay between messages to simulate streaming
+      Thread.sleep(1000)
     }
 
     producer.close()

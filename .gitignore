@@ -5,12 +5,11 @@ target/
 *.bak
 *.tmp
 .sbt/
-.idea/
 .project
 .cache/
-*.iml
-*.iws
-*.ipr
+.idea/*
+target/*
+
 
 # MacOS
 .DS_Store

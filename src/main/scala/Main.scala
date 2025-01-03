@@ -3,6 +3,7 @@ import org.apache.spark.sql.SparkSession
 
 object Main {
   def main(args: Array[String]): Unit = {
+    System.setProperty("log4j.configuration", "file:src/main/resources/log4j.properties")
 
     val conf = new SparkConf()
       .setAppName("Twitter Stream Processing")
@@ -12,7 +13,6 @@ object Main {
       .config(conf)
       .getOrCreate()
 
-    Consumer.run(spark)
 
   }
 }
