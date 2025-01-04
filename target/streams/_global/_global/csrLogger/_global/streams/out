@@ -1,10 +1,4 @@
-[info] downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.12/2.12.3/jackson-module-scala_2.12-2.12.3.pom
-[info] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.12/2.12.3/jackson-module-scala_2.12-2.12.3.pom
-[info] downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.12.3/jackson-annotations-2.12.3.pom
-[info] downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.3/jackson-core-2.12.3.pom
-[info] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.12.3/jackson-annotations-2.12.3.pom
-[info] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.3/jackson-core-2.12.3.pom
-[info] downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-base/2.12.3/jackson-base-2.12.3.pom
-[info] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-base/2.12.3/jackson-base-2.12.3.pom
-[info] downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-bom/2.12.3/jackson-bom-2.12.3.pom
-[info] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-bom/2.12.3/jackson-bom-2.12.3.pom
+[info] downloading https://repo1.maven.org/maven2/io/github/cdimascio/dotenv-scala_2.12/2.2.0/dotenv-scala_2.12-2.2.0.pom
+[info] downloaded https://repo1.maven.org/maven2/io/github/cdimascio/dotenv-scala_2.12/2.2.0/dotenv-scala_2.12-2.2.0.pom
+[info] downloading https://repo1.maven.org/maven2/io/github/cdimascio/dotenv-scala_2.12/2.2.0/dotenv-scala_2.12-2.2.0.pom.sha1
+[info] downloaded https://repo1.maven.org/maven2/io/github/cdimascio/dotenv-scala_2.12/2.2.0/dotenv-scala_2.12-2.2.0.pom.sha1

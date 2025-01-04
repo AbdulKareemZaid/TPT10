@@ -8,11 +8,15 @@ object Main {
     val conf = new SparkConf()
       .setAppName("Twitter Stream Processing")
       .setMaster("local[*]")
+      .set("spark.sql.legacy.timeParserPolicy", "LEGACY")
 
     val spark = SparkSession.builder()
       .config(conf)
       .getOrCreate()
 
+    // start consumer & processing data
+    StreamProcessingConsumerApp.start(spark)
 
+    spark.streams.awaitAnyTermination()
   }
 }

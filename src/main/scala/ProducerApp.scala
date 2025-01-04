@@ -1,62 +1,46 @@
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord, RecordMetadata}
-import org.apache.spark.sql.types.{StringType, StructType}
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.databind.ObjectMapper
-
-import java.time.{Instant, ZoneId}
-import java.time.format.DateTimeFormatter
+import org.apache.spark.sql.SparkSession
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.spark.sql.types._
 import java.util.Properties
 
 object ProducerApp {
   def main(args: Array[String]): Unit = {
-    System.setProperty("log4j.configuration", "file:src/main/resources/log4j.properties")
-
     val spark = SparkSession.builder()
       .appName("ProducerApp")
       .master("local[*]")
+      .config("spark.sql.legacy.timeParserPolicy", "LEGACY")
       .getOrCreate()
 
-    println("Starting Producer...")
-
-    val filePath = "./data/boulder_flood_geolocated_tweets.json"
+    // Define the schema for the JSON data
     val tweetSchema = new StructType()
       .add("created_at", StringType)
-      .add("id", StringType)
+      .add("id_str", StringType)
       .add("text", StringType)
-      .add("geo", StringType)
-      .add("coordinates", StringType)
-      .add("place", StringType)
-      .add("user", StringType)
+      .add("entities", new StructType()
+        .add("hashtags", ArrayType(new StructType().add("text", StringType))))
+      .add("geo", new StructType()
+        .add("coordinates", ArrayType(DoubleType)))
 
-    val tweetDF: DataFrame = spark.read.schema(tweetSchema).json(filePath)
+    val df = spark.read.schema(tweetSchema).json("data/boulder_flood_geolocated_tweets.json")
 
-    val kafkaProps = new Properties()
-    kafkaProps.put("bootstrap.servers", "localhost:9092")
-    kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+    // producer properties
+    val props = new Properties()
+    props.put("bootstrap.servers", "localhost:9092")
+    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
-    val producer = new KafkaProducer[String, String](kafkaProps)
-    val objectMapper = new ObjectMapper()
-    objectMapper.registerModule(DefaultScalaModule)
+    val producer = new KafkaProducer[String, String](props)
 
-    tweetDF.collect().foreach { row =>
-      val tweetJson = objectMapper.writeValueAsString(row.getValuesMap(row.schema.fieldNames))
-      val record = new ProducerRecord[String, String]("twitter_topic", row.getAs[String]("id"), tweetJson)
+    // process and send each row to Kafka with a delay
+    df.collect().foreach { row =>
+      val key = row.getAs[String]("id_str")
+      val value = row.mkString(",")
+      println(s"Adding to topic: key = $key, value = $value")
 
-      producer.send(record, (metadata: RecordMetadata, exception: Exception) => {
-        if (exception != null) {
-          println(s"Message delivery failed: ${exception.getMessage}")
-        } else {
-          val dateTime = Instant.ofEpochMilli(metadata.timestamp())
-            .atZone(ZoneId.systemDefault())
-            .format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-          println(s"Message delivered to ${metadata.topic()} [${metadata.partition()}] at $dateTime")
-        }
-      })
+      val record = new ProducerRecord[String, String]("twitter_topic", key, value)
+      producer.send(record)
 
-      producer.flush()
-      Thread.sleep(1000)
+      // 2-second delay
     }
 
     producer.close()

@@ -37,3 +37,8 @@ dist/
 db/
 tmp/
 output/
+.idea
+.bsp
+project/project
+project/target
+target
