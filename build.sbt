@@ -14,7 +14,8 @@ lazy val root = (project in file("."))
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3",
       "com.johnsnowlabs.nlp" %% "spark-nlp" % "5.5.2",
       "org.apache.spark" %% "spark-mllib" % "3.5.4",
-      "commons-lang" % "commons-lang" % "2.6"
+      "commons-lang" % "commons-lang" % "2.6",
+      "org.mongodb.scala" %% "mongo-scala-driver" % "4.7.2"
 
     )
   )
