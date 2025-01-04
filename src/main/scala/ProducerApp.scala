@@ -11,7 +11,7 @@ object ProducerApp {
       .config("spark.sql.legacy.timeParserPolicy", "LEGACY")
       .getOrCreate()
 
-    // Define the schema for the JSON data
+      // schema
     val tweetSchema = new StructType()
       .add("created_at", StringType)
       .add("id_str", StringType)
