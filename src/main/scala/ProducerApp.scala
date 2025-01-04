@@ -41,6 +41,7 @@ object ProducerApp {
       producer.send(record)
 
       // 2-second delay
+      Thread.sleep(2000)
     }
 
     producer.close()
