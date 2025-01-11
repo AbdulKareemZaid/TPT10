@@ -41,6 +41,7 @@ object Producer {
     val finalDfWithValue = finalDf.withColumn("value", to_json(struct($"*")))
 
 
+    println("Producer Started...")
     val query = finalDfWithValue.selectExpr("CAST(value AS STRING) AS value")
       .writeStream
       .format("kafka")

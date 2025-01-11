@@ -48,7 +48,7 @@ object Consumer {
     scoredDf.printSchema()
 
     val finalDf = scoredDf.select("created_at", "coordinates", "hashtags", "text", "sentiment_score")
-
+    println("Consumer Started...")
     finalDf
       .writeStream
       .format("mongodb")
